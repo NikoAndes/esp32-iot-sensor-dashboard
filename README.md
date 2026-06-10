@@ -1,47 +1,51 @@
 # ESP32 IoT Sensor Dashboard
 
-![Platform](https://img.shields.io/badge/Platform-ESP32-blue) ![Language](https://img.shields.io/badge/Language-C%2B%2B-orange) ![Protocol](https://img.shields.io/badge/Protocol-MQTT-green) ![License](https://img.shields.io/badge/License-MIT-yellow) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
+![Platform](https://img.shields.io/badge/Platform-ESP32-red) ![Language](https://img.shields.io/badge/Language-C%2B%2B%2FJS-blue) ![License](https://img.shields.io/badge/License-MIT-blue) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
+
+An IoT prototype combining ESP32 firmware and a web dashboard for real-time sensor monitoring. Works with simulated data out of the box; designed for easy DHT22 or BMP280 integration.
 
 ## Overview
 
-IoT sensor monitoring system built on the ESP32 microcontroller. Reads temperature, humidity (DHT22), and motion (PIR sensor) data, publishes readings via MQTT, and serves a real-time web dashboard over Wi-Fi. Designed as a foundation for home automation and industrial sensing applications.
+The system has two components:
+- **Firmware** (`firmware/`): ESP32 sketch that simulates temperature/humidity and outputs JSON via Serial
+- **Dashboard** (`dashboard/`): A responsive web app that auto-updates sensor cards, a canvas chart, and a readings history table
 
 ## Features
 
-- Real-time sensor data (temperature, humidity, motion) via DHT22 and PIR
-- MQTT publish/subscribe for sensor topics
-- Lightweight web dashboard served from ESP32 (AsyncWebServer)
-- Wi-Fi auto-reconnect and NTP time sync
-- JSON payload formatting for easy integration
-- OTA (Over-The-Air) firmware update support
+- Temperature and humidity monitoring (simulated)
+- Device status with warning thresholds
+- Auto-updating every 2.5 seconds
+- Canvas-based reading history chart
+- Last 10 readings table
+- Responsive dark theme
+- No external JS libraries required
+
+## Architecture
+
+```
+ESP32 Sensor Node
+  -> Serial JSON output
+  -> (future) WiFi / WebSocket / HTTP API
+  -> Web Dashboard (HTML/CSS/JS)
+```
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| MCU | ESP32 (Espressif) |
-| Language | C++ (Arduino framework) |
-| Communication | MQTT (PubSubClient), Wi-Fi |
-| Sensors | DHT22, HC-SR501 PIR |
-| Web Server | ESPAsyncWebServer |
-| Protocol | HTTP, WebSocket |
-| IDE | VS Code + PlatformIO |
+- ESP32 / Arduino IDE (C++)
+- HTML5, CSS3, Vanilla JavaScript
+- Canvas API for charts
 
 ## Project Structure
 
 ```
 esp32-iot-sensor-dashboard/
-├── src/
-│   ├── main.cpp            # Entry point, setup & loop
-│   ├── sensors.h/.cpp      # DHT22 + PIR sensor logic
-│   ├── mqtt_client.h/.cpp  # MQTT connection & publish
-│   ├── web_server.h/.cpp   # AsyncWebServer + WebSocket
-│   └── config.h            # Wi-Fi, MQTT broker, pins
-├── data/
-│   ├── index.html          # Dashboard UI
-│   ├── style.css           # Dashboard styles
-│   └── app.js              # WebSocket client JS
-├── platformio.ini
+├── firmware/
+│   └── esp32_sensor_node/
+│       └── esp32_sensor_node.ino
+├── dashboard/
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -49,67 +53,35 @@ esp32-iot-sensor-dashboard/
 
 ## How to Run
 
-### Prerequisites
-- VS Code + PlatformIO extension
-- ESP32 DevKit board
-- DHT22 sensor + HC-SR501 PIR sensor
-- MQTT broker (e.g., Mosquitto, HiveMQ)
+**Firmware:**
+1. Open `firmware/esp32_sensor_node/esp32_sensor_node.ino` in Arduino IDE
+2. Select board: `ESP32 Dev Module`
+3. Upload and open Serial Monitor at `115200 baud`
 
-### Steps
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/NikoAndes/esp32-iot-sensor-dashboard.git
-   cd esp32-iot-sensor-dashboard
-   ```
-2. Copy `src/config.h.example` to `src/config.h` and fill in:
-   ```cpp
-   #define WIFI_SSID     "your_ssid"
-   #define WIFI_PASS     "your_password"
-   #define MQTT_BROKER   "broker_ip"
-   #define MQTT_PORT     1883
-   ```
-3. Upload filesystem (SPIFFS) for the web dashboard:
-   ```
-   PlatformIO: Upload Filesystem Image
-   ```
-4. Build and flash firmware:
-   ```
-   PlatformIO: Upload
-   ```
-5. Open Serial Monitor (115200 baud) to view IP address, then visit `http://<ESP32_IP>` in browser.
-
-## Pin Configuration
-
-| Sensor | ESP32 Pin |
-|--------|----------|
-| DHT22 Data | GPIO 4 |
-| PIR Signal | GPIO 14 |
-| Status LED | GPIO 2 |
+**Dashboard:**
+1. Open `dashboard/index.html` directly in a browser
+2. The dashboard runs with simulated JS data automatically
 
 ## What I Learned
 
-- Integrating multiple sensor protocols on a single MCU
-- Asynchronous web server patterns for embedded systems
-- MQTT publish/subscribe architecture and broker configuration
-- SPIFFS filesystem for serving static web assets from ESP32
-- WebSocket communication for real-time browser updates
-- OTA update workflows for remote firmware maintenance
+- Embedded firmware structuring for sensor nodes
+- JSON Serial output from ESP32
+- Canvas API for real-time charts
+- Bridging hardware and web interfaces
+- IoT system architecture design
 
 ## Future Improvements
 
-- [ ] Add OLED display for local readout
-- [ ] Implement data logging to SD card or Firebase
-- [ ] Add threshold-based alerts via Telegram bot
-- [ ] Support multiple sensor nodes with MQTT discovery
-- [ ] Build a Node-RED dashboard as an alternative frontend
-- [ ] Add deep sleep mode for battery-powered deployment
+- Real DHT22 or BMP280 sensor integration
+- WebSocket for live browser updates
+- Backend API for data persistence
+- Mobile alerts for warning states
+- Multiple sensor nodes
 
 ## Author
 
-**Nicolas Isaza Sierra** — [GitHub @NikoAndes](https://github.com/NikoAndes)
-
-Mechatronics engineering student | ESP32 & IoT enthusiast | UMNG, Colombia
+**Nicolas Isaza Sierra** | [@NikoAndes](https://github.com/NikoAndes)
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License
