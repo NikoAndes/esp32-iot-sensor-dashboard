@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP32 IoT Sensor Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-name">IoT Sensor</span>
+        <span class="brand-tag">ESP32 Dashboard</span>
+      </div>
+      <div class="header-status">
+        <span class="live-dot"></span>
+        <span id="connectionStatus">Simulated Data</span>
+      </div>
+    </div>
+  </header>
+  <main class="main">
+    <section class="cards">
+      <div class="card">
+        <div class="card-label">Temperature</div>
+        <div class="card-value" id="tempValue">--</div>
+        <div class="card-unit">&deg;C</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Humidity</div>
+        <div class="card-value" id="humValue">--</div>
+        <div class="card-unit">%</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Device Status</div>
+        <div class="card-value" id="statusValue">--</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Last Update</div>
+        <div class="card-value small" id="lastUpdate">--</div>
+      </div>
+    </section>
+    <section class="chart-section">
+      <div class="chart-header">
+        <h2>Reading History</h2>
+        <span id="readingCount">0 readings</span>
+      </div>
+      <canvas id="sensorChart"></canvas>
+    </section>
+    <section class="table-section">
+      <h2>Last Readings</h2>
+      <div class="table-wrapper">
+        <table class="readings-table">
+          <thead><tr><th>#</th><th>Time</th><th>Temp (&deg;C)</th><th>Humidity (%)</th><th>Status</th></tr></thead>
+          <tbody id="readingsBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <p>ESP32 IoT Dashboard &mdash; Prototype &mdash; <a href="https://github.com/NikoAndes" target="_blank">Nicolas Isaza Sierra</a></p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
